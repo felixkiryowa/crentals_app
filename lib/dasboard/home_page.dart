@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   SharedPreferences _sharedPreferences;
-  var _authToken, _id, _name, _homeResponse;
+  var _authToken, _id, _firstname, _lastname, _homeResponse, mobilenoorEmailKey;
 
   @override
   void initState() {
@@ -30,8 +30,10 @@ class _HomePageState extends State<HomePage> {
   _fetchSessionAndNavigate() async {
     _sharedPreferences = await _prefs;
     String authToken = AuthUtils.getToken(_sharedPreferences);
-//    var id = _sharedPreferences.getInt(AuthUtils.userIdKey);
-//    var name = _sharedPreferences.getString(AuthUtils.nameKey);
+    var id = _sharedPreferences.getInt(AuthUtils.userIdKey);
+    var firstname = _sharedPreferences.getString(AuthUtils.firstNameKey);
+    var lastname = _sharedPreferences.getString(AuthUtils.lastNameKey);
+    var mobilenoorEmailKey = _sharedPreferences.getString(AuthUtils.mobilenoorEmailKey);
 
     print(authToken);
 
@@ -39,8 +41,9 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _authToken = authToken;
-//      _id = id;
-//      _name = name;
+      _id = id;
+      _firstname = firstname;
+      _lastname = lastname;
     });
 
     if(_authToken == null) {
@@ -49,7 +52,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _fetchHome(String authToken) async {
-    var responseJson = await NetworkUtils.fetch(authToken, '/api/v1/home');
+    var responseJson = await NetworkUtils.fetch(authToken, '/api/v1/user');
 
     if(responseJson == null) {
 
@@ -59,7 +62,7 @@ class _HomePageState extends State<HomePage> {
 
       NetworkUtils.showSnackBar(_scaffoldKey, null);
 
-    } else if(responseJson['errors'] != null) {
+    } else if(responseJson['error'] != null) {
 
       _logout();
 
@@ -89,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                 new Container(
                   padding: const EdgeInsets.all(8.0),
                   child: new Text(
-                    "USER_ID: $_id \nUSER_NAME: $_name \nHOME_RESPONSE: $_homeResponse",
+                    '$_firstname' + '$_lastname',
                     style: new TextStyle(
                         fontSize: 24.0,
                         color: Colors.grey.shade700
