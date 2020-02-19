@@ -10,7 +10,6 @@ class ErrorBox extends StatelessWidget {
     if (isError) {
       return new Container(
         child: new Column(children: <Widget>[
-          new Image.asset('assets/images/rentals_logo.png'),
           new Container(
               decoration: new BoxDecoration(
                   border: const Border(
@@ -36,7 +35,7 @@ class ErrorBox extends StatelessWidget {
             ),
       );
     } else {
-      return new Container(child: new Image.asset('assets/images/rentals_logo.png'));
+      return new Container();
     }
   }
 }
